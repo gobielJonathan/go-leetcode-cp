@@ -1,43 +1,39 @@
 package main
 
-type TreeNode struct {
-	Val   int
-	Left  *TreeNode
-	Right *TreeNode
-}
+import "fmt"
 
-func height(p *TreeNode) int {
-	if p == nil {
-		return 0
-	}
-	var l = height(p.Left)
-	var r = height(p.Right)
-	if l > r {
-		return l + 1
-	}
-	return r + 1
-}
-func getValBaseLevel(root *TreeNode, target int, level int) []int {
-	var temp = []int{}
-	var x = getValBaseLevel(root.Left, target, level+1)
-	if target == level {
-		return append(temp, root.Val)
-	}
-	var y = getValBaseLevel(root.Right, target, level+1)
-	return append(x, y...)
-}
-func widthOfBinaryTree(root *TreeNode) int {
-	var h = height(root)
-	var count = 0
-	for i := 1; i <= h; i++ {
-		var l = getValBaseLevel(root, i, 1)
-		if len(l) > count {
-			count = len(l)
+func fullJustify(words []string, maxWidth int) []string {
+	var l = len(words)
+	var counter = 0
+	var res = []string{}
+	var latest = 0
+
+	for i := 0; i < l-1; i++ {
+		counter += len(words[i])
+		if counter+len(words[i+1]) > maxWidth {
+			counter = 0
+			var strsplit = words[latest:i]
+			var lstrsplit = len(strsplit)
+			var space = maxWidth / lstrsplit
+			var temp = ""
+			for i, v := range strsplit {
+				temp += v
+				if i < lstrsplit {
+					for k := 0; k < space; k++ {
+						temp += " "
+					}
+				}
+			}
+			res = append(res, temp)
+			latest = i
 		}
 	}
-	return count
+	return res
 }
 
 func main() {
-	// https://leetcode.com/problems/maximum-width-of-binary-tree/
+	// https://leetcode.com/problems/text-justification/
+	fmt.Println(fullJustify([]string{
+		"This", "is", "an", "example", "of", "text", "justification.",
+	}, 16))
 }
