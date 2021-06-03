@@ -13,12 +13,15 @@ func fullJustify(words []string, maxWidth int) []string {
 		if counter+len(words[i+1]) > maxWidth {
 			counter = 0
 			var strsplit = words[latest:i]
+			if latest > 0 {
+				strsplit = words[latest : i+1]
+			}
 			var lstrsplit = len(strsplit)
 			var space = maxWidth / lstrsplit
 			var temp = ""
 			for i, v := range strsplit {
 				temp += v
-				if i < lstrsplit {
+				if i < lstrsplit-1 {
 					for k := 0; k < space; k++ {
 						temp += " "
 					}
