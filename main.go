@@ -1,39 +1,48 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
-func fullJustify(words []string, maxWidth int) []string {
-	var l = len(words)
-	var counter = 0
-	var res = []string{}
-	var latest = 0
+type TreeNode struct {
+	Val   int
+	Left  *TreeNode
+	Right *TreeNode
+}
 
-	for i := 0; i < l-1; i++ {
-		counter += len(words[i])
-		if counter+len(words[i+1]) > maxWidth {
-			counter = 0
-			var strsplit = words[latest:i]
-			var lstrsplit = len(strsplit)
-			var space = maxWidth / lstrsplit
-			var temp = ""
-			for i, v := range strsplit {
-				temp += v
-				if i < lstrsplit {
-					for k := 0; k < space; k++ {
-						temp += " "
-					}
-				}
-			}
-			res = append(res, temp)
-			latest = i
-		}
+func isleaf(r *TreeNode) bool {
+	return r.Left == nil && r.Right == nil
+}
+
+func getpaths(root *TreeNode) string {
+	if root == nil {
+		return ""
 	}
-	return res
+
+	var l = getpaths(root.Left)
+	var r = getpaths(root.Right)
+
+	return l + r + " "
+}
+func sumNumbers(root *TreeNode) int {
+	fmt.Println(getpaths(root))
+	return 0
 }
 
 func main() {
-	// https://leetcode.com/problems/text-justification/
-	fmt.Println(fullJustify([]string{
-		"This", "is", "an", "example", "of", "text", "justification.",
-	}, 16))
+	// https://leetcode.com/problems/sum-root-to-leaf-numbers/
+	// https://leetcode.com/problems/add-one-row-to-tree/
+	var r = &TreeNode{
+		Val: 4,
+		Left: &TreeNode{
+			Val: 2,
+			Left: &TreeNode{
+				Val: 3,
+			},
+			Right: &TreeNode{
+				Val: 1,
+			},
+		},
+	}
+	fmt.Println(sumNumbers(r))
 }
